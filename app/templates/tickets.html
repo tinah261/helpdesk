@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Tickets - HelpDesk{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col">
+        <h1 class="h2 mb-1" style="font-weight: 700; color: var(--color-primary);" id="main-heading">Liste des Tickets</h1>
+        <p class="text-muted">Consultez, recherchez et filtrez les requêtes de support.</p>
+    </div>
+    {% if not current_user.is_admin() %}
+    <div class="col-auto">
+        <a href="{{ url_for('main.create_ticket') }}" class="btn btn-primary-custom" id="btn-new-ticket">Nouveau ticket</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Filters -->
+<div class="card-custom mb-4 py-3 px-4">
+    <form action="{{ url_for('main.tickets') }}" method="GET" class="row g-3 align-items-end" id="filters-form">
+        <div class="col-md-3">
+            <label for="status" class="form-label" style="font-size: 0.8rem;">Statut</label>
+            <select class="form-select form-select-sm" id="status" name="status">
+                <option value="">Tous</option>
+                <option value="Ouvert" {% if status_filter == 'Ouvert' %}selected{% endif %}>Ouvert</option>
+                <option value="En cours" {% if status_filter == 'En cours' %}selected{% endif %}>En cours</option>
+                <option value="Résolu" {% if status_filter == 'Résolu' %}selected{% endif %}>Résolu</option>
+                <option value="Fermé" {% if status_filter == 'Fermé' %}selected{% endif %}>Fermé</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="priority" class="form-label" style="font-size: 0.8rem;">Priorité</label>
+            <select class="form-select form-select-sm" id="priority" name="priority">
+                <option value="">Toutes</option>
+                <option value="Faible" {% if priority_filter == 'Faible' %}selected{% endif %}>Faible</option>
+                <option value="Moyenne" {% if priority_filter == 'Moyenne' %}selected{% endif %}>Moyenne</option>
+                <option value="Haute" {% if priority_filter == 'Haute' %}selected{% endif %}>Haute</option>
+                <option value="Urgente" {% if priority_filter == 'Urgente' %}selected{% endif %}>Urgente</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="category" class="form-label" style="font-size: 0.8rem;">Catégorie</label>
+            <select class="form-select form-select-sm" id="category" name="category">
+                <option value="">Toutes</option>
+                <option value="Réseau" {% if category_filter == 'Réseau' %}selected{% endif %}>Réseau</option>
+                <option value="Matériel" {% if category_filter == 'Matériel' %}selected{% endif %}>Matériel</option>
+                <option value="Logiciel" {% if category_filter == 'Logiciel' %}selected{% endif %}>Logiciel</option>
+                <option value="Compte utilisateur" {% if category_filter == 'Compte utilisateur' %}selected{% endif %}>Compte utilisateur</option>
+                <option value="Autre" {% if category_filter == 'Autre' %}selected{% endif %}>Autre</option>
+            </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" id="btn-filter" class="btn btn-sm btn-primary-custom w-50">Filtrer</button>
+            <a href="{{ url_for('main.tickets') }}" id="btn-reset" class="btn btn-sm btn-secondary-custom w-50">Réinitialiser</a>
+        </div>
+    </form>
+</div>
+
+<!-- Tickets Table -->
+<div class="card-custom">
+    <div class="table-responsive">
+        <table class="table table-custom align-middle" id="tickets-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Sujet</th>
+                    {% if current_user.is_admin() %}
+                        <th>Auteur</th>
+                    {% endif %}
+                    <th>Catégorie</th>
+                    <th>Priorité</th>
+                    <th>Statut</th>
+                    <th>Date de création</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if tickets %}
+                    {% for ticket in tickets %}
+                        <tr>
+                            <td>#{{ ticket.id }}</td>
+                            <td style="font-weight: 600;">{{ ticket.title }}</td>
+                            {% if current_user.is_admin() %}
+                                <td>{{ ticket.author.username }} ({{ ticket.author.email }})</td>
+                            {% endif %}
+                            <td>
+                                <span class="badge badge-category">{{ ticket.category }}</span>
+                            </td>
+                            <td>
+                                <span class="badge-priority badge-priority-{{ ticket.priority | lower }}">{{ ticket.priority }}</span>
+                            </td>
+                            <td>
+                                <span class="badge-status badge-status-{{ ticket.status | lower | replace(' ', '-') }}">{{ ticket.status }}</span>
+                            </td>
+                            <td class="text-muted">{{ ticket.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>
+                                <a href="{{ url_for('main.ticket_detail', ticket_id=ticket.id) }}" class="btn btn-secondary-custom btn-sm" id="btn-view-{{ ticket.id }}">
+                                    {% if current_user.is_admin() %}Gérer{% else %}Détails{% endif %}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="{% if current_user.is_admin() %}8{% else %}7{% endif %}" class="text-center text-muted py-4">
+                            Aucun ticket ne correspond à ces critères.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

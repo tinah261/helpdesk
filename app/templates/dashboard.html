@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - HelpDesk{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col">
+        <h1 class="h2 mb-1" style="font-weight: 700; color: var(--color-primary);" id="main-heading">Mon Espace Client</h1>
+        <p class="text-muted">Bienvenue, {{ current_user.username }}. Suivez l'avancement de vos demandes d'assistance.</p>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('main.create_ticket') }}" class="btn btn-primary-custom" id="btn-create-ticket-header">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Nouveau ticket
+        </a>
+    </div>
+</div>
+
+<!-- Stats Widgets -->
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="stat-box" id="stat-total">
+            <div class="stat-value">{{ total_created }}</div>
+            <div class="stat-label">Tickets créés</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-box urgent" id="stat-open">
+            <div class="stat-value">{{ open_count }}</div>
+            <div class="stat-label">Tickets ouverts</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-box resolved" id="stat-resolved">
+            <div class="stat-value">{{ resolved_count }}</div>
+            <div class="stat-label">Tickets résolus</div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Tickets Table -->
+<div class="card-custom">
+    <h2 class="h4 mb-4" style="font-weight: 700;">Mes tickets récents</h2>
+    <div class="table-responsive">
+        <table class="table table-custom align-middle" id="recent-tickets-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Sujet</th>
+                    <th>Catégorie</th>
+                    <th>Priorité</th>
+                    <th>Statut</th>
+                    <th>Date de création</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if recent_tickets %}
+                    {% for ticket in recent_tickets %}
+                        <tr>
+                            <td>#{{ ticket.id }}</td>
+                            <td style="font-weight: 600;">{{ ticket.title }}</td>
+                            <td>
+                                <span class="badge badge-category">{{ ticket.category }}</span>
+                            </td>
+                            <td>
+                                <span class="badge-priority badge-priority-{{ ticket.priority | lower }}">{{ ticket.priority }}</span>
+                            </td>
+                            <td>
+                                <span class="badge-status badge-status-{{ ticket.status | lower | replace(' ', '-') }}">{{ ticket.status }}</span>
+                            </td>
+                            <td class="text-muted">{{ ticket.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>
+                                <a href="{{ url_for('main.ticket_detail', ticket_id=ticket.id) }}" class="btn btn-secondary-custom btn-sm" id="btn-view-{{ ticket.id }}">Détails</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            Vous n'avez pas encore soumis de ticket. 
+                            <a href="{{ url_for('main.create_ticket') }}">Cliquez ici pour soumettre votre premier ticket</a>.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

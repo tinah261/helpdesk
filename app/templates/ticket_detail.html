@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Ticket #{{ ticket.id }} - HelpDesk{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('main.tickets') }}" class="btn btn-secondary-custom btn-sm" id="btn-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Retour à la liste
+    </a>
+</div>
+
+<div class="row g-4">
+    <!-- Main content: Description and Responses -->
+    <div class="col-lg-8">
+        <div class="card-custom mb-4">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                <h1 class="h3 mb-0" style="font-weight: 700; color: var(--color-primary);" id="ticket-title">
+                    Ticket #{{ ticket.id }} : {{ ticket.title }}
+                </h1>
+                <span class="badge badge-category fs-6">{{ ticket.category }}</span>
+            </div>
+            
+            <p class="text-muted mb-4" style="font-size: 0.9rem;">
+                Créé le <strong>{{ ticket.created_at.strftime('%d/%m/%Y à %H:%M') }}</strong> par <strong>{{ ticket.author.username }}</strong> ({{ ticket.author.email }})
+            </p>
+            
+            <hr>
+            
+            <h5 class="h6 text-uppercase fw-bold text-muted mb-3">Description du problème</h5>
+            <div class="p-3 bg-light rounded" style="white-space: pre-wrap; font-size: 1.05rem;" id="ticket-description">
+                {{- ticket.description -}}
+            </div>
+        </div>
+
+        <!-- Admin Response Box -->
+        <div class="card-custom">
+            <h2 class="h5 mb-4" style="font-weight: 700; color: var(--color-primary);">Suivi & Réponse de l'administrateur</h2>
+            
+            {% if ticket.admin_response %}
+                <div class="p-3 mb-4 rounded border-start border-primary border-4" style="background-color: #f8fafc;" id="admin-response-content">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong class="text-primary-custom">Réponse de l'Administrateur</strong>
+                        <span class="text-muted" style="font-size: 0.8rem;">Dernière mise à jour : {{ ticket.updated_at.strftime('%d/%m/%Y %H:%M') }}</span>
+                    </div>
+                    <p class="mb-0" style="white-space: pre-wrap;">{{ ticket.admin_response }}</p>
+                </div>
+            {% else %}
+                <div class="alert alert-light border text-center text-muted py-4 mb-4" id="no-response-alert">
+                    Aucune réponse de l'administrateur pour le moment.
+                </div>
+            {% endif %}
+
+            <!-- Admin Response Editing Form (visible only to admins) -->
+            {% if current_user.is_admin() %}
+                <form action="{{ url_for('main.ticket_detail', ticket_id=ticket.id) }}" method="POST" id="admin-response-form">
+                    <hr class="my-4">
+                    <h5 class="h6 mb-3 fw-bold text-uppercase text-muted">Mettre à jour la réponse</h5>
+                    
+                    <!-- Include status/priority dropdowns inside the form too for easy submit -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="status" class="form-label">Statut</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="Ouvert" {% if ticket.status == 'Ouvert' %}selected{% endif %}>Ouvert</option>
+                                <option value="En cours" {% if ticket.status == 'En cours' %}selected{% endif %}>En cours</option>
+                                <option value="Résolu" {% if ticket.status == 'Résolu' %}selected{% endif %}>Résolu</option>
+                                <option value="Fermé" {% if ticket.status == 'Fermé' %}selected{% endif %}>Fermé</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="priority" class="form-label">Priorité</label>
+                            <select class="form-select" id="priority" name="priority">
+                                <option value="Faible" {% if ticket.priority == 'Faible' %}selected{% endif %}>Faible</option>
+                                <option value="Moyenne" {% if ticket.priority == 'Moyenne' %}selected{% endif %}>Moyenne</option>
+                                <option value="Haute" {% if ticket.priority == 'Haute' %}selected{% endif %}>Haute</option>
+                                <option value="Urgente" {% if ticket.priority == 'Urgente' %}selected{% endif %}>Urgente</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="admin_response" class="form-label">Message de réponse</label>
+                        <textarea class="form-control" id="admin_response" name="admin_response" rows="5" placeholder="Saisissez votre réponse technique ou des instructions ici..." required>{{ ticket.admin_response or '' }}</textarea>
+                    </div>
+                    
+                    <button type="submit" id="btn-submit-response" class="btn btn-primary-custom w-100">Enregistrer les modifications</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Sidebar: Ticket properties -->
+    <div class="col-lg-4">
+        <div class="card-custom">
+            <h3 class="h5 mb-4" style="font-weight: 700;">Détails du ticket</h3>
+            
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <span class="text-muted">Statut</span>
+                <span class="badge-status badge-status-{{ ticket.status | lower | replace(' ', '-') }}" id="ticket-status-sidebar">{{ ticket.status }}</span>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <span class="text-muted">Priorité</span>
+                <span class="badge-priority badge-priority-{{ ticket.priority | lower }}" id="ticket-priority-sidebar">{{ ticket.priority }}</span>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <span class="text-muted">Catégorie</span>
+                <span class="fw-semibold">{{ ticket.category }}</span>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <span class="text-muted">Créateur</span>
+                <span class="fw-semibold">{{ ticket.author.username }}</span>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <span class="text-muted">Date de création</span>
+                <span class="fw-semibold">{{ ticket.created_at.strftime('%d/%m/%Y %H:%M') }}</span>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center py-2">
+                <span class="text-muted">Dernière mise à jour</span>
+                <span class="fw-semibold">{{ ticket.updated_at.strftime('%d/%m/%Y %H:%M') }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Inscription - HelpDesk{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card-custom">
+            <h1 class="h3 mb-3 text-center" style="font-weight: 700; color: var(--color-primary);" id="page-title">Inscription</h1>
+            <p class="text-muted text-center mb-4">Créez un compte pour soumettre vos tickets d'assistance</p>
+            
+            <form id="register-form" action="{{ url_for('auth.register') }}" method="POST">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Nom d'utilisateur</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Entrez un pseudo" required autocomplete="username">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Adresse Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="user@helpdesk.local" required autocomplete="email">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required autocomplete="new-password">
+                </div>
+                <button type="submit" id="btn-submit-register" class="btn btn-primary-custom w-100 mt-2">Créer un compte</button>
+            </form>
+            
+            <hr class="my-4">
+            <p class="text-center mb-0 text-muted">
+                Déjà un compte ? <a href="{{ url_for('auth.login') }}" id="link-login">Se connecter</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

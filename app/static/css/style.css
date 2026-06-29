@@ -1,0 +1,265 @@
+/* Thème "Clair mais Classe" - HelpDesk DevOps */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-main: #f4f6f9;         /* Gris très clair / Blanc cassé */
+    --bg-card: #ffffff;         /* Blanc pur */
+    --text-main: #2d3748;       /* Gris foncé */
+    --text-muted: #718096;      /* Gris moyen pour texte secondaire */
+    
+    /* Palette Bleue Premium */
+    --color-primary: #1e3a8a;   /* Bleu nuit */
+    --color-primary-hover: #172554;
+    --color-secondary: #3b82f6; /* Bleu plus vif */
+    --color-secondary-hover: #2563eb;
+    
+    /* Couleurs Statuts & Priorités (douces, non agressives) */
+    --status-open: #fee2e2;     /* Rouge très doux */
+    --status-open-text: #b91c1c;
+    --status-progress: #fef3c7; /* Jaune très doux */
+    --status-progress-text: #b45309;
+    --status-resolved: #d1fae5; /* Vert très doux */
+    --status-resolved-text: #047857;
+    --status-closed: #e2e8f0;   /* Gris neutre */
+    --status-closed-text: #475569;
+
+    --font-family: 'Outfit', sans-serif;
+    --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    --border-soft: 1px solid #e2e8f0;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-family);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar */
+.navbar-custom {
+    background-color: var(--color-primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.navbar-custom .navbar-brand {
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-custom .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.navbar-custom .nav-link:hover, 
+.navbar-custom .nav-link.active {
+    color: #ffffff;
+}
+
+.user-badge {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.85rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 50px;
+    font-weight: 500;
+}
+
+/* Cartes Élégantes */
+.card-custom {
+    background-color: var(--bg-card);
+    border: var(--border-soft);
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+    padding: 2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.07), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
+}
+
+/* Boutons */
+.btn-primary-custom {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--color-primary-hover);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+}
+
+.btn-secondary-custom {
+    background-color: #ffffff;
+    color: var(--text-main);
+    font-weight: 600;
+    border: var(--border-soft);
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.btn-secondary-custom:hover {
+    background-color: #f8fafc;
+    color: var(--text-main);
+}
+
+/* Badges de Statuts */
+.badge-status {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 50px;
+    display: inline-block;
+}
+
+.badge-status-ouvert {
+    background-color: var(--status-open);
+    color: var(--status-open-text);
+}
+
+.badge-status-en-cours {
+    background-color: var(--status-progress);
+    color: var(--status-progress-text);
+}
+
+.badge-status-resolu {
+    background-color: var(--status-resolved);
+    color: var(--status-resolved-text);
+}
+
+.badge-status-ferme {
+    background-color: var(--status-closed);
+    color: var(--status-closed-text);
+}
+
+/* Badges de Priorités */
+.badge-priority {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+.badge-priority-faible { background-color: #e2e8f0; color: #475569; }
+.badge-priority-moyenne { background-color: #dbeafe; color: #1d4ed8; }
+.badge-priority-haute { background-color: #ffedd5; color: #c2410c; }
+.badge-priority-urgente { background-color: #fee2e2; color: #b91c1c; }
+
+/* Badges de Catégories */
+.badge-category {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: var(--border-soft);
+    font-weight: 500;
+}
+
+/* Statistiques du Dashboard */
+.stat-box {
+    background-color: var(--bg-card);
+    border: var(--border-soft);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    border-top: 4px solid var(--color-secondary);
+}
+
+.stat-box.urgent {
+    border-top-color: #ef4444;
+}
+
+.stat-box.resolved {
+    border-top-color: #10b981;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+/* Tableau */
+.table-custom {
+    background-color: #ffffff;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: var(--border-soft);
+}
+
+.table-custom th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    padding: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.table-custom td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table-custom tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-custom tbody tr {
+    transition: background-color 0.2s;
+}
+
+.table-custom tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Formulaires */
+.form-label {
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Pied de page */
+footer {
+    background-color: #ffffff;
+    border-top: var(--border-soft);
+    padding: 1.5rem 0;
+    margin-top: auto;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
