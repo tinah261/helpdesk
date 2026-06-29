@@ -1,0 +1,38 @@
+# Environnement virtuel Python
+venv/
+env/
+ENV/
+
+# Fichiers compilés Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Variables d'environnement (contiennent des secrets)
+.env
+
+# Bases de données locales (SQLite)
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# Fichiers Docker temporaires
+*.pid
+
+# Éditeurs / IDE
+.vscode/
+.idea/
+*.swp
+
+# Système
+.DS_Store
+Thumbs.db
+
+# Rapports de couverture de tests
+.coverage
+htmlcov/
+.pytest_cache/
