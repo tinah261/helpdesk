@@ -43,8 +43,10 @@ pipeline {
                 echo '=== ÉTAPE 6 : Vérification de la santé de l\'application (Health Check) ==='
                 // Attente du démarrage complet des services (Postgres et Nginx compris)
                 sleep 10
-                // Test de la route de santé via Nginx
-                sh 'curl -f http://localhost/health'
+                // Le conteneur Jenkins n'étant pas sur le réseau de l'application,
+                // le test est exécuté depuis un conteneur éphémère attaché à ce réseau,
+                // plutôt que depuis "localhost" qui ne pointerait pas vers Nginx ici.
+                sh 'docker run --rm --network helpdesk-pipeline_helpdesk-net curlimages/curl -f http://nginx/health'
             }
         }
     }
