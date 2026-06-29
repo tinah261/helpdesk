@@ -4,7 +4,7 @@ Ce projet consiste en la mise en place d'une chaîne d'intégration et de déplo
 
 ---
 
-## 🎯 Objectif DevOps
+## Objectif DevOps
 
 L'objectif principal est d'automatiser entièrement le flux de livraison :
 1. Modification du code source de l'application Flask.
@@ -17,7 +17,7 @@ L'objectif principal est d'automatiser entièrement le flux de livraison :
 
 ---
 
-## 🛠️ Technologies Utilisées
+## Technologies Utilisées
 
 - **Backend** : Python 3.11, Flask 3.0, Flask-SQLAlchemy, Flask-Login.
 - **Base de données** : PostgreSQL 16 (persistance via volumes Docker).
@@ -29,7 +29,7 @@ L'objectif principal est d'automatiser entièrement le flux de livraison :
 
 ---
 
-## 🏗️ Architecture Technique
+##  Architecture Technique
 
 ```mermaid
 graph TD
@@ -55,7 +55,7 @@ graph TD
 
 ---
 
-## 📁 Structure des Fichiers
+##  Structure des Fichiers
 
 ```text
 helpdesk-devops/
@@ -97,7 +97,7 @@ helpdesk-devops/
 
 ---
 
-## ⚙️ Prérequis
+##  Prérequis
 
 - **Docker** et **Docker Compose** installés sur votre machine.
 - **Python 3.8+** (si exécution locale hors Docker).
@@ -105,7 +105,7 @@ helpdesk-devops/
 
 ---
 
-## 🚀 Installation et Démarrage
+##  Installation et Démarrage
 
 ### Option 1 : Lancement avec Docker Compose (Production)
 
@@ -159,7 +159,7 @@ Il s'agit de la méthode recommandée qui configure automatiquement toute la sta
 
 ---
 
-## 👥 Comptes de Test (Pré-configurés)
+##  Comptes de Test (Pré-configurés)
 
 Le script `init_db.py` crée automatiquement deux comptes utilisateurs de rôles différents lors du premier démarrage :
 
@@ -170,7 +170,7 @@ Le script `init_db.py` crée automatiquement deux comptes utilisateurs de rôles
 
 ---
 
-## 🧪 Tests Automatisés
+##  Tests Automatisés
 
 La suite de tests unitaires et d'intégration valide les éléments requis :
 - Réponse 200 sur la page d'accueil.
@@ -189,7 +189,7 @@ docker run --rm app-devops pytest /app/tests/
 
 ---
 
-## 🔗 Configuration Nginx
+##  Configuration Nginx
 
 Nginx écoute sur le **port 80** de l'hôte et transmet le trafic au conteneur `app` (Flask/Gunicorn) sur le port 80 à l'intérieur du réseau Docker. 
 
@@ -208,7 +208,7 @@ server {
 
 ---
 
-## 🔄 Explication du Pipeline Jenkins
+##  Explication du Pipeline Jenkins
 
 Le fichier `Jenkinsfile` structure le déploiement en 6 stages :
 1. **Checkout** : Récupère le code depuis le dépôt Git.
@@ -220,7 +220,7 @@ Le fichier `Jenkinsfile` structure le déploiement en 6 stages :
 
 ---
 
-## 🎬 Scénario de Démonstration Vidéo
+##  Scénario de Démonstration Vidéo
 
 Pour filmer une vidéo de démonstration complète de 2-3 minutes pour la soutenance du TP :
 
@@ -261,7 +261,7 @@ Pour filmer une vidéo de démonstration complète de 2-3 minutes pour la souten
 
 ---
 
-## ⌨️ Commandes Utiles
+##  Commandes Utiles
 
 ### Commandes Git
 - Initialiser le dépôt local : `git init`

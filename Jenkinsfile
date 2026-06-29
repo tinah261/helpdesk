@@ -19,7 +19,7 @@ pipeline {
         stage('3. Run Tests') {
             steps {
                 echo '=== ÉTAPE 3 : Exécution des tests unitaires et d\'intégration dans le conteneur ==='
-                # Exécution des tests Pytest à l'intérieur du conteneur construit
+                // Exécution des tests Pytest à l'intérieur du conteneur construit
                 sh 'docker run --rm app-devops pytest /app/tests/'
             }
         }
@@ -41,9 +41,9 @@ pipeline {
         stage('6. Health Check') {
             steps {
                 echo '=== ÉTAPE 6 : Vérification de la santé de l\'application (Health Check) ==='
-                # Attente du démarrage complet des services (Postgres et Nginx compris)
+                // Attente du démarrage complet des services (Postgres et Nginx compris)
                 sleep 10
-                # Test de la route de santé via Nginx
+                // Test de la route de santé via Nginx
                 sh 'curl -f http://localhost/health'
             }
         }
