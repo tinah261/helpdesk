@@ -1,0 +1,7 @@
+FROM nginx:alpine
+
+# La configuration est copiée dans l'image au moment du build,
+# plutôt que montée en volume, afin de fonctionner correctement
+# même lorsque le build est déclenché depuis un environnement
+# Docker-outside-of-Docker (ex: Jenkins exécuté dans un conteneur).
+COPY nginx.conf /etc/nginx/nginx.conf
