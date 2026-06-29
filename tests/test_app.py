@@ -3,7 +3,7 @@ import sys
 import pytest
 
 # Ajouter le dossier app au chemin d'importation de Python
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../app')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Configurer les variables d'environnement de test avant d'importer create_app
 os.environ['DATABASE_URL'] = 'sqlite:///:memory:'
