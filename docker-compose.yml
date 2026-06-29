@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: helpdesk_db
+      POSTGRES_USER: helpdesk_user
+      POSTGRES_PASSWORD: helpdesk_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U helpdesk_user -d helpdesk_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - helpdesk-net
+
+  app:
+    build: .
+    container_name: app
+    command: sh -c "python init_db.py && gunicorn --bind 0.0.0.0:80 --workers 4 app.app:app"
+    environment:
+      - DATABASE_URL=postgresql://helpdesk_user:helpdesk_password@postgres:5432/helpdesk_db
+      - SECRET_KEY=helpdesk-super-secret-key-prod-987654321
+      - FLASK_ENV=production
+      - APP_VERSION=1.0.0
+      - APP_MESSAGE=Application HelpDesk déployée automatiquement avec Jenkins
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "80"
+    networks:
+      - helpdesk-net
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    networks:
+      - helpdesk-net
+    restart: always
+
+volumes:
+  postgres_data:
+
+networks:
+  helpdesk-net:
+    driver: bridge
